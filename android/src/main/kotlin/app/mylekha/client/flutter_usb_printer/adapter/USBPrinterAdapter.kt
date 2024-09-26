@@ -74,7 +74,12 @@ class USBPrinterAdapter {
     fun init(reactContext: Context?) {
         mContext = reactContext
         mUSBManager = mContext!!.getSystemService(Context.USB_SERVICE) as UsbManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+       if (Build.VERSION.SDK_INT >= 33){
+            val intent: Intent = Intent(UsbDeviceReceiver.Config.ACTION_USB_PERMISSION)
+            intent.setPackage(mContext.packageName)
+            mPermissionIntent =
+                PendingIntent.getActivity(context, 0,  intent, PendingIntent.FLAG_MUTABLE)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             mPermissionIntent =
                 PendingIntent.getBroadcast(mContext, 0, Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
         } else {
